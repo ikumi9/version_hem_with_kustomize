@@ -19,57 +19,41 @@ get_version_number() {
 # Path to the Chart.yaml file
 chart_path="./charts/elasticsearch/Chart.yaml"
 
-# Check if the version should be updated or not
-update_version=true
-
-# Process script arguments
-for arg in "$@"; do
-    case $arg in
-    --update)
-        update_version=false
-        ;;
-    esac
-done
-
 # Call the function to get the version number
 version=$(get_version_number "$chart_path")
 
-if [ "$update_version" = true ]; then
-    # ################## INCREMENT VERSION #####################
-    increment_type='patch'
+echo "$version"
+# ################## INCREMENT VERSION #####################
+increment_type='patch'
 
-    # Split the version number into its components
-    IFS='.' read -ra version_parts <<<"$version"
+# Split the version number into its components
+IFS='.' read -ra version_parts <<<"$version"
 
-    # Determine which part to increment and update it
-    case $increment_type in
-    "major")
-        ((version_parts[0]++))
-        version_parts[1]=0
-        version_parts[2]=0
-        ;;
-    "minor")
-        ((version_parts[1]++))
-        version_parts[2]=0
-        ;;
-    "patch")
-        ((version_parts[2]++))
-        ;;
-    *)
-        echo "Invalid increment type. Please specify 'major', 'minor', or 'patch'."
-        exit 1
-        ;;
-    esac
+# Determine which part to increment and update it
+case $increment_type in
+"major")
+    ((version_parts[0]++))
+    version_parts[1]=0
+    version_parts[2]=0
+    ;;
+"minor")
+    ((version_parts[1]++))
+    version_parts[2]=0
+    ;;
+"patch")
+    ((version_parts[2]++))
+    ;;
+*)
+    echo "Invalid increment type. Please specify 'major', 'minor', or 'patch'."
+    exit 1
+    ;;
+esac
 
-    # Join the version parts back together
-    new_version=$(
-        IFS='.'
-        echo "${version_parts[*]}"
-    )
-else
-    new_version="$version"
-fi
-
+# Join the version parts back together
+new_version=$(
+    IFS='.'
+    echo "${version_parts[*]}"
+)
 echo "$new_version"
 
 # Validate the arguments
@@ -94,6 +78,6 @@ else
 fi
 # ################## UPDATE VERSION IN FILE END #####################
 
-export ChartVersion="$new_version"
+export ChartVersion=new_version
 
 kustomize build . --enable-helm

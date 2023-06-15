@@ -7,7 +7,11 @@
 
 ### RUN SCRIPT TO UPDATE CURRENT CHART VERSION
 
-```bash
+```sh
 sh run.sh
 
 ```
+### Run Kustomise build without updating the version
+```sh
+ sh run.sh --update version=false
+ ```
