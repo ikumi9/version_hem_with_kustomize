@@ -1,0 +1,13 @@
+
+### PREQUISITE
+- Kustomize
+- Helm
+
+
+
+### RUN SCRIPT TO UPDATE CURRENT CHART VERSION
+
+```bash
+sh run.sh
+
+```
