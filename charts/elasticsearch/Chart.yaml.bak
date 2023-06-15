@@ -9,4 +9,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/elastic/elasticsearch
-version: 8.5.8
+version: 10.2.3

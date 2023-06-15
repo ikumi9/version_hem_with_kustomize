@@ -19,14 +19,18 @@ get_version_number() {
 # Path to the Chart.yaml file
 chart_path="./charts/elasticsearch/Chart.yaml"
 
-# Check if the version should be updated or not
+# Default values
 update_version=true
+release_type="patch"
 
 # Process script arguments
 for arg in "$@"; do
     case $arg in
-    --update)
-        update_version=false
+    --update-version=*)
+        update_version="${arg#*=}"
+        ;;
+    --release=*)
+        release_type="${arg#*=}"
         ;;
     esac
 done
@@ -35,14 +39,11 @@ done
 version=$(get_version_number "$chart_path")
 
 if [ "$update_version" = true ]; then
-    # ################## INCREMENT VERSION #####################
-    increment_type='patch'
-
     # Split the version number into its components
     IFS='.' read -ra version_parts <<<"$version"
 
     # Determine which part to increment and update it
-    case $increment_type in
+    case $release_type in
     "major")
         ((version_parts[0]++))
         version_parts[1]=0
@@ -56,7 +57,7 @@ if [ "$update_version" = true ]; then
         ((version_parts[2]++))
         ;;
     *)
-        echo "Invalid increment type. Please specify 'major', 'minor', or 'patch'."
+        echo "Invalid release type. Please specify 'major', 'minor', or 'patch'."
         exit 1
         ;;
     esac
@@ -77,8 +78,6 @@ if [ -z "$version" ]; then
     echo "Usage: $0 <version> [<increment>]"
     exit 1
 fi
-
-# ################## INCREMENT VERSION END #####################
 
 # ################## UPDATE VERSION IN FILE  #####################
 CHART_PATH="./charts/elasticsearch/Chart.yaml"
