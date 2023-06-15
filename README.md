@@ -9,7 +9,7 @@
 
 ### Run Kustomise build without updating the version
 ```sh
- sh run.sh --update version=false
+ sh run.sh --update-version=false
  ```
 ### Update minor version
  There are `three` releases `patch`, `minor` and `major` default is `patch ` 
