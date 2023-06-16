@@ -1,0 +1,14 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  create-deployment-branch:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - uses: imranismail/setup-kustomize@v2
+      - run: |
+            echo "Testing"
