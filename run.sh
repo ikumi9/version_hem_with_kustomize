@@ -85,7 +85,7 @@ CHART_PATH="./charts/elasticsearch/Chart.yaml"
 # Check if the file exists
 if [ -f "$CHART_PATH" ]; then
     # Update the version number in Chart.yaml using sed
-    sed -i .bak "s/version: .*/version: $new_version/" "$CHART_PATH"
+    sed -i .bak "s/version: .*/version: $new_version/g" "$CHART_PATH"
     echo "Chart.yaml updated with new version: $new_version"
 else
     echo "Chart.yaml not found at $CHART_PATH"
