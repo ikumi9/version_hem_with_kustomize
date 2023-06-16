@@ -16,5 +16,5 @@ jobs:
             echo "Testing"
             ls -alh
             chmod +x run.sh
-            sh run.sh --update-version=false 
+            ./run.sh --update-version=false 
           
