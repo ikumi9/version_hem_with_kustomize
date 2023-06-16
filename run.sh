@@ -43,7 +43,7 @@ if [ "$update_version" = true ]; then
     IFS='.' read -ra version_parts <<<"$version"
 
     # Determine which part to increment and update it
-    case $ in
+    case $release_type in
     "major")
         ((version_parts[0]++))
         version_parts[1]=0
