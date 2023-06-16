@@ -15,6 +15,7 @@ jobs:
         run: |
             echo "Testing"
             ls -alh
+            kustomize --version
             chmod +x run.sh
             ./run.sh --release=patch --update-version=true
           
