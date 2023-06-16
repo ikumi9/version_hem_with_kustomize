@@ -8,7 +8,10 @@ jobs:
   create-deployment-branch:
     runs-on: ubuntu-latest
     steps:
-    
+      - uses: actions/checkout@v4
       - uses: imranismail/setup-kustomize@v2
       - run: |
             echo "Testing"
+            ls -alh
+            sh run.sh --update-version=false 
+          
