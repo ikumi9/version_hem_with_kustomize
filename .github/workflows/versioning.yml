@@ -3,13 +3,18 @@ on:
     branches:
       - master
   pull_request:
+    types:
+      labeled
 
 jobs:
-  create-deployment-branch:
+  version-chart:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
+      - name: Get Labels
+        run: |
+          echo github.event.pull_request.labels
       - name: Run Kustomise
         shell: bash
         run: |
@@ -18,4 +23,6 @@ jobs:
             kustomize version
             chmod +x run.sh
             ./run.sh --release=patch --update-version=true
+
+        
           
