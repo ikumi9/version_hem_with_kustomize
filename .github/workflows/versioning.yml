@@ -13,8 +13,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
       - name: Get Labels
+        id: labels
         run: |
-          echo ${{ github.event.pull_request.labels }}
+           echo "::set-output name=labels::${{ toJson(github.event.pull_request.labels) }}"
+      - name: Display Labels
+        run: |
+          echo "Labels: ${{ steps.labels.outputs.labels }}"
+           
       - name: Run Kustomise
         shell: bash
         run: |
