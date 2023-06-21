@@ -31,12 +31,16 @@ jobs:
             kustomize version
             chmod +x run.sh
             ./run.sh --release=$RELEASE --update-version=true
+        working-directory: charts/elasticsearch
+        
 
       - name: Run Kustomize Build On Current Version
         shell: bash
         run: |
             chmod +x run.sh
             ./run.sh --update-version=false
+        working-directory: charts/elasticsearch
+        
             
 
         
