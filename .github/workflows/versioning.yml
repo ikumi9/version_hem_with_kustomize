@@ -10,7 +10,7 @@ on:
 
 jobs:
   version-chart:
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
@@ -33,7 +33,6 @@ jobs:
             ./run.sh --release=$RELEASE --update-version=true
 
       - name: Run Kustomize Build On Current Version
-        if: failure()
         shell: bash
         run: |
             chmod +x run.sh
