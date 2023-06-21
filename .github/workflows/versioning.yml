@@ -15,6 +15,7 @@ jobs:
       - name: Get Labels
         id: labels
         run: |
+           echo ${{ github.event.label.name }}
            echo "::set-output name=labels::${{ toJson(github.event.pull_request.labels) }}"
       - name: Display Labels
         run: |
