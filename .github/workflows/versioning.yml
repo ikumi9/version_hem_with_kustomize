@@ -27,6 +27,7 @@ jobs:
         run: |
             echo "Testing"
             ls -alh
+            echo $RELEASE
             kustomize version
             chmod +x run.sh
             ./run.sh --release=$RELEASE --update-version=true
