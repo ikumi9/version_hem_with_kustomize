@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - master
+      - pr
+      
   pull_request:
     types:
       labeled
@@ -16,19 +18,25 @@ jobs:
         id: labels
         run: |
            echo ${{ github.event.label.name }}
-           echo "::set-output name=labels::${{ toJson(github.event.pull_request.labels) }}"
-      - name: Display Labels
-        run: |
-          echo "Labels: ${{ steps.labels.outputs.labels }}"
-           
-      - name: Run Kustomise
+      - name: Update Chart Version
         shell: bash
+        if: ${{ github.event.label.name }}
+        env:
+          RELEASE: ${{ github.event.label.name }}
         run: |
             echo "Testing"
             ls -alh
             kustomize version
             chmod +x run.sh
-            ./run.sh --release=patch --update-version=true
+            ./run.sh --release=$RELEASE --update-version=true
+
+      - name: Run Kustomize Build On Current Version
+        if: failure()
+        shell: bash
+        run: |
+            chmod +x run.sh
+            ./run.sh --update-version=false
+            
 
         
           
