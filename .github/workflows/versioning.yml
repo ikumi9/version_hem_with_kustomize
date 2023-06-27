@@ -24,9 +24,9 @@ jobs:
         id: labels
         run: |
            echo ${{ github.event.label.name }}
-      - name: Update Chart Version
+      - name: Update Chart Version 
         shell: bash
-        if: ${{ github.event.label.name }}
+        if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
         env:
           RELEASE: ${{ github.event.label.name }}
         run: |
