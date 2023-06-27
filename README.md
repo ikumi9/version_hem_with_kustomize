@@ -1,4 +1,5 @@
-
+![](https://github.com/ikumi9/version_hem_with_kustomize/workflows/CI/badge.svg?branch=master&event=push)
+![](https://github.com/ikumi9/version_hem_with_kustomize/workflows/CI/badge.svg?branch=pr&event=push)
 ### PREREQUISITE
 - Kustomize
 - Helm

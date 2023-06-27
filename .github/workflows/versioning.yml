@@ -1,3 +1,4 @@
+name: CI
 on:
   push:
     branches:
@@ -11,13 +12,15 @@ on:
 jobs:
   version-chart:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       CHART_PATH: ./charts/elasticsearch/Chart.yaml
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
       - name: Get Labels
-        if: ${{ github.event.label.name }}
+        if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
         id: labels
         run: |
            echo ${{ github.event.label.name }}
@@ -27,12 +30,13 @@ jobs:
         env:
           RELEASE: ${{ github.event.label.name }}
         run: |
-            echo "Testing"
-            ls -alh
-            echo $RELEASE
             chmod +x run.sh
             ./run.sh --chart-path=$CHART_PATH --release=$RELEASE --update-version=true
         
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: success()
+        with:
+          commit_message: Chart Version Updated successfully!
 
       - name: Run Kustomize Build On Current Version
         shell: bash
