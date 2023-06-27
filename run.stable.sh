@@ -16,6 +16,9 @@ get_version_number() {
     fi
 }
 
+# Path to the Chart.yaml file
+chart_path="./charts/elasticsearch/Chart.yaml"
+
 # Default values
 update_version=true
 release_type="patch"
@@ -28,9 +31,6 @@ for arg in "$@"; do
         ;;
     --release=*)
         release_type="${arg#*=}"
-        ;;
-    --chart-path=*)
-        chart_path="${arg#*=}"
         ;;
     esac
 done
@@ -75,19 +75,20 @@ echo "$new_version"
 
 # Validate the arguments
 if [ -z "$version" ]; then
-    echo "Usage: $0 --chart-path=<path_to_chart> [--update-version=<true/false>] [--release=<major/minor/patch>]"
+    echo "Usage: $0 <version> [<increment>]"
     exit 1
 fi
 
 # ################## UPDATE VERSION IN FILE  #####################
+CHART_PATH="./charts/elasticsearch/Chart.yaml"
 
 # Check if the file exists
-if [ -f "$chart_path" ]; then
+if [ -f "$CHART_PATH" ]; then
     # Update the version number in Chart.yaml using sed
-    sed -i "s/^version: .*/version: $new_version/g" "$chart_path"
+    sed -i .bak -e "s/version: .*/version: $new_version/g" "$CHART_PATH"
     echo "Chart.yaml updated with new version: $new_version"
 else
-    echo "Chart.yaml not found at $chart_path"
+    echo "Chart.yaml not found at $CHART_PATH"
     exit 1
 fi
 # ################## UPDATE VERSION IN FILE END #####################
