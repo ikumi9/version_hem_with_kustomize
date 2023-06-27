@@ -84,7 +84,7 @@ fi
 # Check if the file exists
 if [ -f "$chart_path" ]; then
     # Update the version number in Chart.yaml using sed
-    sed -i .bak "s/version:.*/version: $new_version/" "$chart_path"
+    sed -i .bak "s/^version:.*/version: $new_version/" "$chart_path"
     echo "Chart.yaml updated with new version: $new_version"
 else
     echo "Chart.yaml not found at $chart_path"
