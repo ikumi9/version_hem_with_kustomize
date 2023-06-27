@@ -11,6 +11,8 @@ on:
 jobs:
   version-chart:
     runs-on: ubuntu-latest
+    env:
+      CHART_PATH: ./charts/elasticsearch/Chart.yaml
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
@@ -28,18 +30,15 @@ jobs:
             echo "Testing"
             ls -alh
             echo $RELEASE
-            kustomize version
             chmod +x run.sh
-            ./run.sh --release=$RELEASE --update-version=true
-        working-directory: charts/elasticsearch
+            ./run.sh --chart-path=$CHART_PATH --release=$RELEASE --update-version=true
         
 
       - name: Run Kustomize Build On Current Version
         shell: bash
         run: |
             chmod +x run.sh
-            ./run.sh --update-version=false
-        working-directory: charts/elasticsearch
+            ./run.sh --chart-path=$CHART_PATH --update-version=false
         
             
 
