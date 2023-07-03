@@ -28,9 +28,15 @@ jobs:
         run: |
 
               echo "Issue Labels:"
-                for label in ${{ github.event.issue.labels.*.name }}; do
+                for label in ${{ toJson(github.event.issue.labels) }}; do
                     echo "- $label"
                 done
+
+                for label in "${{ toJson(github.event.issue.labels) }}"; do
+                    name=$(echo $label | jq -r '.name')
+                    echo " JR filtered - $name"
+                done
+
       - name: Update Chart Version
         shell: bash
         if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
