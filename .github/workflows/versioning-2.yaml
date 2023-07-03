@@ -1,14 +1,12 @@
 name: CI
 on:
-  workflow_dispatch:
-  # push:
-  #   branches:
-  #     - master # comment out this line to avoid error on master trigger
-  #     - pr
+  push:
+    branches:
+      - pr
 
-  # pull_request:
-  #   types:
-  #     labeled
+  pull_request:
+    types:
+      labeled
 
 jobs:
   version-chart:
@@ -25,6 +23,14 @@ jobs:
         id: labels 
         run: |
            echo ${{ github.event.label.name }}
+      - name: Test All Labels
+        id: test_labels
+        run: |
+
+              echo "Issue Labels:"
+                for label in ${{ github.event.issue.labels.*.name }}; do
+                    echo "- $label"
+                done
       - name: Update Chart Version
         shell: bash
         if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
