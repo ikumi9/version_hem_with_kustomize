@@ -9,4 +9,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/elastic/elasticsearch
-version: 11.0.30
+version: 11.0.31
