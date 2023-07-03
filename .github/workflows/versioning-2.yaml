@@ -19,27 +19,27 @@ jobs:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
       - name: Get Labels
-        if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
+        if: ${{ github.event.label.name == 'patch'}} || ${{ github.event.label.name == 'minor'}} || ${{ github.event.label.name == 'major'}}
         id: labels 
         run: |
            echo ${{ github.event.label.name }}
-      - name: Test All Labels
-        id: test_labels
-        run: |
+    #   - name: Test All Labels
+    #     id: test_labels
+    #     run: |
 
-              echo "Issue Labels:"
-                for label in ${{ toJson(github.event.issue.labels) }}; do
-                    echo "- $label"
-                done
+    #           echo "Issue Labels:"
+    #             for label in ${{ toJson(github.event.issue.labels) }}; do
+    #                 echo "- $label"
+    #             done
 
-                for label in "${{ toJson(github.event.issue.labels) }}"; do
-                    name=$(echo $label | jq -r '.name')
-                    echo " JR filtered - $name"
-                done
+    #             for label in "${{ toJson(github.event.issue.labels) }}"; do
+    #                 name=$(echo $label | jq -r '.name')
+    #                 echo " JR filtered - $name"
+    #             done
 
       - name: Update Chart Version
         shell: bash
-        if: ${{ github.event.label.name }} && github.event_name == 'pull_request'
+        if: ${{ github.event.label.name == 'patch'}} || ${{ github.event.label.name == 'minor'}} || ${{ github.event.label.name == 'major'}}
         env:
           RELEASE: ${{ github.event.label.name }}
         run: |
