@@ -1,0 +1,71 @@
+name: CI
+on:
+  push:
+    branches:
+      - pr
+
+  pull_request:
+    types:
+      labeled
+
+jobs:
+  version-chart:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      CHART_PATH: ./charts/elasticsearch/Chart.yaml
+      TOKEN: ${{ secrets.TOKEN_SECRET }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: imranismail/setup-kustomize@v2
+      - name: Get All commentss
+        run: |
+            curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $TOKEN"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/ikumi9/version_hem_with_kustomize/pulls/comments"
+      - name: Get Labels
+        if: ${{ github.event.label.name == 'patch'}} || ${{ github.event.label.name == 'minor'}} || ${{ github.event.label.name == 'major'}}
+        id: labels 
+        run: |
+           echo ${{ github.event.label.name }}
+    #   - name: Test All Labels
+    #     id: test_labels
+    #     run: |
+
+    #           echo "Issue Labels:"
+    #             for label in ${{ toJson(github.event.issue.labels) }}; do
+    #                 echo "- $label"
+    #             done
+
+    #             for label in "${{ toJson(github.event.issue.labels) }}"; do
+    #                 name=$(echo $label | jq -r '.name')
+    #                 echo " JR filtered - $name"
+    #             done
+
+      - name: Update Chart Version
+        shell: bash
+        if: ${{ github.event.label.name == 'patch'}} || ${{ github.event.label.name == 'minor'}} || ${{ github.event.label.name == 'major'}}
+        env:
+          RELEASE: ${{ github.event.label.name }}
+        run: |
+            chmod +x run.sh
+            ./run.sh --chart-path=$CHART_PATH --release=$RELEASE --update-version=true
+        
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: success()
+        with:
+          commit_message: Chart Version Updated successfully!
+
+      - name: Run Kustomize Build On Current Version
+        shell: bash
+        run: |
+            chmod +x run.sh
+            ./run.sh --chart-path=$CHART_PATH --update-version=false
+        
+            
+
+        
+          
