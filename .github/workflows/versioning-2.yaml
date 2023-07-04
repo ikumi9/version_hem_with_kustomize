@@ -14,10 +14,18 @@ jobs:
     permissions:
       contents: write
     env:
-      CHART_PATH: ./charts/elasticsearch/Chart.yaml # TODO: make path dynamic
+      CHART_PATH: ./charts/elasticsearch/Chart.yaml
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
+      - name: Get All comments
+        run: |
+            curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/ikumi9/version_hem_with_kustomize/pulls/comments
       - name: Get Labels
         if: ${{ github.event.label.name == 'patch'}} || ${{ github.event.label.name == 'minor'}} || ${{ github.event.label.name == 'major'}}
         id: labels 
