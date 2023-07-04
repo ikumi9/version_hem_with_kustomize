@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: imranismail/setup-kustomize@v2
-      - name: Get All comments
+      - name: Get All commentss
         run: |
             curl -L \
             -H "Accept: application/vnd.github+json" \
